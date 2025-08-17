@@ -5,122 +5,968 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tourette Connect - Rencontres pour personnes avec SGT</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .pulse-heart {
+      animation: pulse-heart 2s infinite;
+    }
+    
+    @keyframes pulse-heart {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .chat-bubble {
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .modal {
+      backdrop-filter: blur(10px);
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
-  <!-- En-tête -->
-  <header class="bg-blue-600 text-white py-6">
-    <div class="container mx-auto text-center">
-      <h1 class="text-3xl font-bold">Tourette Connect</h1>
-      <p class="mt-2">Un espace sûr pour les personnes atteintes du syndrome de Gilles de la Tourette</p>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+
+  <!-- Navigation -->
+  <nav class="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-heart text-2xl text-purple-600 pulse-heart"></i>
+          <span class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            Tourette Connect
+          </span>
+        </div>
+        <div class="hidden md:flex space-x-6">
+          <a href="#home" class="text-gray-700 hover:text-purple-600 transition-colors font-medium">Accueil</a>
+          <a href="#about" class="text-gray-700 hover:text-purple-600 transition-colors font-medium">À propos</a>
+          <a href="#profiles" class="text-gray-700 hover:text-purple-600 transition-colors font-medium">Profils</a>
+          <a href="#chat" class="text-gray-700 hover:text-purple-600 transition-colors font-medium">Messages</a>
+        </div>
+        <button onclick="toggleMobileMenu()" class="md:hidden text-gray-700">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- En-tête héro -->
+  <header id="home" class="gradient-bg text-white py-20 relative overflow-hidden">
+    <div class="container mx-auto text-center px-4 relative z-10">
+      <div class="floating">
+        <i class="fas fa-users text-6xl mb-6 opacity-80"></i>
+      </div>
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">Tourette Connect</h1>
+      <p class="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
+        Un espace bienveillant où les personnes atteintes du syndrome de Gilles de la Tourette 
+        peuvent créer des liens authentiques et durables
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="scrollToSection('create-profile')" 
+                class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg">
+          <i class="fas fa-user-plus mr-2"></i>Rejoindre la communauté
+        </button>
+        <button onclick="scrollToSection('about')" 
+                class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all transform hover:scale-105">
+          <i class="fas fa-info-circle mr-2"></i>En savoir plus
+        </button>
+      </div>
+    </div>
+    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+      <div class="absolute top-20 left-10 w-32 h-32 bg-white rounded-full floating"></div>
+      <div class="absolute top-40 right-20 w-24 h-24 bg-white rounded-full floating" style="animation-delay: -2s;"></div>
+      <div class="absolute bottom-20 left-1/4 w-16 h-16 bg-white rounded-full floating" style="animation-delay: -4s;"></div>
     </div>
   </header>
 
-  <!-- Section principale -->
-  <main class="container mx-auto py-8 px-4">
-    <!-- Présentation -->
-    <section class="text-center mb-12">
-      <h2 class="text-2xl font-semibold mb-4">Bienvenue sur Tourette Connect</h2>
-      <p class="text-lg text-gray-700 max-w-2xl mx-auto">
-        Tourette Connect est une plateforme conçue pour permettre aux personnes atteintes du syndrome de Gilles de la Tourette de se rencontrer, d'échanger et de tisser des liens amicaux ou amoureux dans un environnement sans jugement.
-      </p>
-    </section>
-
-    <!-- Formulaire de création de profil -->
-    <section class="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto mb-12">
-      <h3 class="text-xl font-semibold mb-4">Créez votre profil</h3>
-      <div class="space-y-4">
-        <div>
-          <label for="name" class="block text-gray-700">Nom ou pseudo</label>
-          <input type="text" id="name" class="w-full p-2 border rounded" placeholder="Votre nom ou pseudo">
-        </div>
-        <div>
-          <label for="age" class="block text-gray-700">Âge</label>
-          <input type="number" id="age" class="w-full p-2 border rounded" placeholder="Votre âge">
-        </div>
-        <div>
-          <label for="description" class="block text-gray-700">Description</label>
-          <textarea id="description" class="w-full p-2 border rounded" rows="4" placeholder="Parlez de vous, de vos intérêts ou de ce que vous cherchez..."></textarea>
-        </div>
-        <div>
-          <label for="interests" class="block text-gray-700">Intérêts</label>
-          <input type="text" id="interests" class="w-full p-2 border rounded" placeholder="Ex : musique, jeux vidéo, nature">
-        </div>
-        <button onclick="addProfile()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Créer mon profil</button>
+  <!-- Section À propos -->
+  <section id="about" class="py-20">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">Notre mission</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-blue-600 mx-auto mb-8"></div>
       </div>
-    </section>
-
-    <!-- Liste des profils -->
-    <section id="profiles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <h3 class="text-xl font-semibold mb-4 col-span-full">Profils</h3>
-      <!-- Les profils seront ajoutés dynamiquement ici -->
-    </section>
-
-    <!-- Messagerie (simulée) -->
-    <section class="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto mt-12">
-      <h3 class="text-xl font-semibold mb-4">Envoyer un message</h3>
-      <div class="space-y-4">
-        <div>
-          <label for="recipient" class="block text-gray-700">Destinataire</label>
-          <input type="text" id="recipient" class="w-full p-2 border rounded" placeholder="Nom du destinataire">
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center p-8 bg-white rounded-2xl shadow-lg card-hover">
+          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-shield-alt text-2xl text-purple-600"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Espace sécurisé</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Un environnement protégé où chacun peut s'exprimer librement sans crainte du jugement.
+          </p>
         </div>
-        <div>
-          <label for="message" class="block text-gray-700">Message</label>
-          <textarea id="message" class="w-full p-2 border rounded" rows="4" placeholder="Votre message..."></textarea>
+        
+        <div class="text-center p-8 bg-white rounded-2xl shadow-lg card-hover">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-heart text-2xl text-blue-600"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Compréhension mutuelle</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Rencontrez des personnes qui comprennent vraiment votre vécu et vos défis quotidiens.
+          </p>
         </div>
-        <button onclick="sendMessage()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Envoyer</button>
+        
+        <div class="text-center p-8 bg-white rounded-2xl shadow-lg card-hover">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-users text-2xl text-green-600"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Communauté active</h3>
+          <p class="text-gray-600 leading-relaxed">
+            Rejoignez une communauté dynamique et soutenante pour tisser des liens durables.
+          </p>
+        </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <!-- Statistiques -->
+  <section class="py-16 gradient-bg text-white">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="text-4xl font-bold mb-2" id="stat-members">150+</div>
+          <div class="text-lg opacity-90">Membres actifs</div>
+        </div>
+        <div>
+          <div class="text-4xl font-bold mb-2" id="stat-connections">300+</div>
+          <div class="text-lg opacity-90">Connexions créées</div>
+        </div>
+        <div>
+          <div class="text-4xl font-bold mb-2" id="stat-messages">2.5k+</div>
+          <div class="text-lg opacity-90">Messages échangés</div>
+        </div>
+        <div>
+          <div class="text-4xl font-bold mb-2" id="stat-success">85%</div>
+          <div class="text-lg opacity-90">Taux de satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formulaire de création de profil -->
+  <section id="create-profile" class="py-20">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-gray-800 mb-4">Créez votre profil</h2>
+          <p class="text-lg text-gray-600">Présentez-vous à la communauté et trouvez des personnes qui partagent vos intérêts</p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-3xl shadow-xl">
+          <div class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label for="name" class="block text-gray-700 font-medium mb-2">
+                  <i class="fas fa-user mr-2 text-purple-600"></i>Nom ou pseudo *
+                </label>
+                <input type="text" id="name" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" placeholder="Comment souhaitez-vous être appelé(e) ?">
+              </div>
+              
+              <div>
+                <label for="age" class="block text-gray-700 font-medium mb-2">
+                  <i class="fas fa-birthday-cake mr-2 text-purple-600"></i>Âge *
+                </label>
+                <input type="number" id="age" min="18" max="100" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" placeholder="Votre âge">
+              </div>
+            </div>
+            
+            <div>
+              <label for="location" class="block text-gray-700 font-medium mb-2">
+                <i class="fas fa-map-marker-alt mr-2 text-purple-600"></i>Localisation
+              </label>
+              <input type="text" id="location" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" placeholder="Ville, région (optionnel)">
+            </div>
+            
+            <div>
+              <label for="description" class="block text-gray-700 font-medium mb-2">
+                <i class="fas fa-pen mr-2 text-purple-600"></i>Description *
+              </label>
+              <textarea id="description" rows="4" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" placeholder="Parlez de vous, de votre personnalité, de ce que vous recherchez..."></textarea>
+            </div>
+            
+            <div>
+              <label for="interests" class="block text-gray-700 font-medium mb-2">
+                <i class="fas fa-heart mr-2 text-purple-600"></i>Centres d'intérêt
+              </label>
+              <input type="text" id="interests" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" placeholder="Musique, sport, lecture, jeux vidéo, cuisine...">
+            </div>
+            
+            <div>
+              <label class="block text-gray-700 font-medium mb-2">
+                <i class="fas fa-search mr-2 text-purple-600"></i>Type de relation recherchée
+              </label>
+              <div class="grid md:grid-cols-3 gap-4">
+                <label class="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-300 transition-colors">
+                  <input type="radio" name="relationship_type" value="friendship" class="mr-3 text-purple-600">
+                  <span>Amitié</span>
+                </label>
+                <label class="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-300 transition-colors">
+                  <input type="radio" name="relationship_type" value="romance" class="mr-3 text-purple-600">
+                  <span>Romance</span>
+                </label>
+                <label class="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-300 transition-colors">
+                  <input type="radio" name="relationship_type" value="both" class="mr-3 text-purple-600">
+                  <span>Les deux</span>
+                </label>
+              </div>
+            </div>
+            
+            <button onclick="addProfile()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+              <i class="fas fa-plus mr-2"></i>Créer mon profil
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Liste des profils -->
+  <section id="profiles" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">Découvrez notre communauté</h2>
+        <p class="text-lg text-gray-600">Parcourez les profils et connectez-vous avec des personnes extraordinaires</p>
+      </div>
+      
+      <!-- Filtres -->
+      <div class="mb-8 flex flex-wrap justify-center gap-4">
+        <button onclick="filterProfiles('all')" class="filter-btn active px-6 py-2 rounded-full font-medium transition-all">
+          Tous les profils
+        </button>
+        <button onclick="filterProfiles('friendship')" class="filter-btn px-6 py-2 rounded-full font-medium transition-all">
+          <i class="fas fa-users mr-2"></i>Amitié
+        </button>
+        <button onclick="filterProfiles('romance')" class="filter-btn px-6 py-2 rounded-full font-medium transition-all">
+          <i class="fas fa-heart mr-2"></i>Romance
+        </button>
+      </div>
+      
+      <div id="profiles-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Les profils seront ajoutés dynamiquement ici -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Section de messagerie -->
+  <section id="chat" class="py-20">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-gray-800 mb-4">Centre de messages</h2>
+          <p class="text-lg text-gray-600">Communiquez facilement avec les membres de la communauté</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-8">
+          <!-- Liste des conversations -->
+          <div class="bg-white rounded-2xl shadow-xl p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Conversations</h3>
+            <div id="conversations-list" class="space-y-3">
+              <!-- Les conversations seront ajoutées dynamiquement -->
+            </div>
+          </div>
+          
+          <!-- Zone de chat -->
+          <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4">
+              <h3 class="text-xl font-semibold">Nouveau message</h3>
+            </div>
+            
+            <div class="p-6">
+              <div class="space-y-4">
+                <div>
+                  <label for="recipient" class="block text-gray-700 font-medium mb-2">
+                    <i class="fas fa-user mr-2 text-purple-600"></i>Destinataire
+                  </label>
+                  <select id="recipient" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors">
+                    <option value="">Sélectionnez un destinataire</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label for="message" class="block text-gray-700 font-medium mb-2">
+                    <i class="fas fa-comment mr-2 text-purple-600"></i>Message
+                  </label>
+                  <textarea id="message" rows="6" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" placeholder="Écrivez votre message..."></textarea>
+                </div>
+                
+                <button onclick="sendMessage()" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all">
+                  <i class="fas fa-paper-plane mr-2"></i>Envoyer le message
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Témoignages -->
+  <section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">Témoignages</h2>
+        <p class="text-lg text-gray-600">Ce que disent nos membres de leur expérience</p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-2xl shadow-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-user text-purple-600"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold">Marie, 28 ans</h4>
+              <div class="text-yellow-400">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 italic">"Grâce à Tourette Connect, j'ai trouvé des amis qui me comprennent vraiment. C'est rassurant de pouvoir être soi-même sans jugement."</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-2xl shadow-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-user text-blue-600"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold">Thomas, 34 ans</h4>
+              <div class="text-yellow-400">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 italic">"J'ai rencontré ma compagne ici il y a un an. Notre relation est basée sur une compréhension mutuelle profonde."</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-2xl shadow-lg">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-user text-green-600"></i>
+            </div>
+            <div>
+              <h4 class="font-semibold">Sophie, 26 ans</h4>
+              <div class="text-yellow-400">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 italic">"La communauté est incroyablement soutenante. Je me sens moins seule dans mon parcours."</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Pied de page -->
-  <footer class="bg-gray-800 text-white py-4 text-center">
-    <p>&copy; 2025 Tourette Connect. Tous droits réservés.</p>
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-2 mb-4">
+            <i class="fas fa-heart text-2xl text-purple-400"></i>
+            <span class="text-2xl font-bold">Tourette Connect</span>
+          </div>
+          <p class="text-gray-400 mb-4">Créer des liens authentiques dans un environnement bienveillant.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors">
+              <i class="fab fa-facebook-f text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors">
+              <i class="fab fa-twitter text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors">
+              <i class="fab fa-instagram text-xl"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Navigation</h4>
+          <ul class="space-y-2">
+            <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
+            <li><a href="#profiles" class="text-gray-400 hover:text-white transition-colors">Profils</a></li>
+            <li><a href="#chat" class="text-gray-400 hover:text-white transition-colors">Messages</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Conditions d'utilisation</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Politique de confidentialité</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Newsletter</h4>
+          <p class="text-gray-400 mb-4">Restez informé des dernières actualités de notre communauté.</p>
+          <div class="flex">
+            <input type="email" placeholder="Votre email" class="flex-1 p-2 rounded-l-lg text-gray-800">
+            <button class="bg-purple-600 px-4 py-2 rounded-r-lg hover:bg-purple-700 transition-colors">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+        <p class="text-gray-400">&copy; 2025 Tourette Connect. Tous droits réservés. Fait avec <i class="fas fa-heart text-red-500"></i> pour la communauté SGT.</p>
+      </div>
+    </div>
   </footer>
 
+  <!-- Modal de profil -->
+  <div id="profile-modal" class="fixed inset-0 bg-black bg-opacity-50 modal hidden items-center justify-center z-50">
+    <div class="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold text-gray-800">Profil détaillé</h3>
+        <button onclick="closeProfileModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="modal-content">
+        <!-- Le contenu sera injecté dynamiquement -->
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Fonction pour ajouter un profil (simulation)
-    function addProfile() {
-      const name = document.getElementById('name').value;
-      const age = document.getElementById('age').value;
-      const description = document.getElementById('description').value;
-      const interests = document.getElementById('interests').value;
-
-      if (name && age && description) {
-        const profileSection = document.getElementById('profiles');
-        const profileCard = document.createElement('div');
-        profileCard.className = 'bg-white p-4 rounded-lg shadow-md';
-        profileCard.innerHTML = `
-          <h4 class="text-lg font-semibold">${name}, ${age} ans</h4>
-          <p class="text-gray-600 mt-2">${description}</p>
-          <p class="text-gray-600 mt-2"><strong>Intérêts :</strong> ${interests || 'Non spécifiés'}</p>
-          <button onclick="alert('Envoyer un message à ${name}')" class="bg-blue-600 text-white px-3 py-1 rounded mt-4 hover:bg-blue-700">Contacter</button>
-        `;
-        profileSection.appendChild(profileCard);
-
-        // Réinitialiser le formulaire
-        document.getElementById('name').value = '';
-        document.getElementById('age').value = '';
-        document.getElementById('description').value = '';
-        document.getElementById('interests').value = '';
-        alert('Profil créé avec succès !');
-      } else {
-        alert('Veuillez remplir tous les champs obligatoires (nom, âge, description).');
+    // Variables globales
+    let profiles = [];
+    let messages = [];
+    
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeExampleProfiles();
+      updateRecipientList();
+      animateStats();
+    });
+    
+    // Profils d'exemple
+    function initializeExampleProfiles() {
+      const exampleProfiles = [
+        {
+          name: "Alex", 
+          age: 29, 
+          location: "Paris qui t'encule", 
+          description: "Passionné de photographie et de voyages, je t'emmerde, je t'emmerde, je t'emmerde.", 
+          interests: "photographie, voyages, va chier salope, cinéma", 
+          relationshipType: "both"
+        },
+        {
+          name: "Emma", 
+          age: 25, 
+          location: "Lyon mes couilles", 
+          description: "Amoureuse des livres et de la nature, j'aimerais que tu crèves, putain de merdasse.", 
+          interests: "lecture, randonnée, tarlouze de merde", 
+          relationshipType: "friendship"
+        },
+        {
+          name: "Lucas", 
+          age: 32, 
+          location: "Dans ton cul", 
+          description: "Musicien en herbe et gamer invétéré enculé enculé enculé !", 
+          interests: "musique, jeux vidéo, ta gueule !", 
+          relationshipType: "romance"
+        }
+      ];
+      
+      exampleProfiles.forEach(profile => {
+        profiles.push(profile);
+        addProfileToGrid(profile);
+      });
+    }
+    
+    // Animation des statistiques
+    function animateStats() {
+      const stats = [
+        {id: 'stat-members', target: 150, suffix: '+'},
+        {id: 'stat-connections', target: 300, suffix: '+'},
+        {id: 'stat-messages', target: 2500, suffix: '+', format: 'k'},
+        {id: 'stat-success', target: 85, suffix: '%'}
+      ];
+      
+      stats.forEach(stat => {
+        animateCounter(stat.id, stat.target, stat.suffix, stat.format);
+      });
+    }
+    
+    function animateCounter(elementId, target, suffix, format) {
+      const element = document.getElementById(elementId);
+      let current = 0;
+      const increment = target / 100;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        
+        let displayValue = Math.floor(current);
+        if (format === 'k' && displayValue >= 1000) {
+          displayValue = (displayValue / 1000).toFixed(1) + 'k';
+        } else {
+          displayValue = displayValue.toString();
+        }
+        
+        element.textContent = displayValue + suffix;
+      }, 20);
+    }
+    
+    // Fonction pour faire défiler vers une section
+    function scrollToSection(sectionId) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }
+    
+    // Fonction pour basculer le menu mobile
+    function toggleMobileMenu() {
+      // Implémentation du menu mobile (simplifiée)
+      alert('Menu mobile - Fonctionnalité à implémenter');
+    }
+    
+    // Fonction pour ajouter un profil
+    function addProfile() {
+      const name = document.getElementById('name').value.trim();
+      const age = document.getElementById('age').value;
+      const location = document.getElementById('location').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const interests = document.getElementById('interests').value.trim();
+      const relationshipType = document.querySelector('input[name="relationship_type"]:checked')?.value;
 
-    // Fonction pour simuler l'envoi d'un message
+      if (!name || !age || !description) {
+        showNotification('Veuillez remplir tous les champs obligatoires (nom, âge, description).', 'error');
+        return;
+      }
+      
+      if (age < 18 || age > 100) {
+        showNotification('L\'âge doit être compris entre 18 et 100 ans.', 'error');
+        return;
+      }
+
+      const profile = {
+        name,
+        age: parseInt(age),
+        location: location || 'Non spécifiée',
+        description,
+        interests: interests || 'Non spécifiés',
+        relationshipType: relationshipType || 'both',
+        id: Date.now() // ID simple basé sur le timestamp
+      };
+
+      profiles.push(profile);
+      addProfileToGrid(profile);
+      updateRecipientList();
+
+      // Réinitialiser le formulaire
+      document.getElementById('name').value = '';
+      document.getElementById('age').value = '';
+      document.getElementById('location').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('interests').value = '';
+      document.querySelectorAll('input[name="relationship_type"]').forEach(radio => radio.checked = false);
+      
+      showNotification('Profil créé avec succès ! Bienvenue dans la communauté.', 'success');
+      
+      // Faire défiler vers la section des profils
+      setTimeout(() => {
+        scrollToSection('profiles');
+      }, 1500);
+    }
+    
+    // Fonction pour ajouter un profil à la grille
+    function addProfileToGrid(profile) {
+      const profilesGrid = document.getElementById('profiles-grid');
+      const profileCard = document.createElement('div');
+      profileCard.className = 'profile-card bg-white p-6 rounded-2xl shadow-lg card-hover';
+      profileCard.setAttribute('data-relationship-type', profile.relationshipType);
+      
+      const relationshipIcon = getRelationshipIcon(profile.relationshipType);
+      const relationshipText = getRelationshipText(profile.relationshipType);
+      
+      profileCard.innerHTML = `
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              ${profile.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <h4 class="text-xl font-semibold text-gray-800">${profile.name}</h4>
+              <p class="text-gray-500">${profile.age} ans • ${profile.location}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-2xl mb-1">${relationshipIcon}</div>
+            <span class="text-xs text-gray-500">${relationshipText}</span>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <p class="text-gray-600 leading-relaxed">${profile.description}</p>
+        </div>
+        
+        <div class="mb-6">
+          <h5 class="font-medium text-gray-700 mb-2">
+            <i class="fas fa-heart text-purple-600 mr-2"></i>Centres d'intérêt
+          </h5>
+          <div class="flex flex-wrap gap-2">
+            ${profile.interests.split(',').map(interest => 
+              `<span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">${interest.trim()}</span>`
+            ).join('')}
+          </div>
+        </div>
+        
+        <div class="flex space-x-3">
+          <button onclick="viewProfile('${profile.id || profile.name}')" 
+                  class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+            <i class="fas fa-eye mr-2"></i>Voir le profil
+          </button>
+          <button onclick="contactProfile('${profile.name}')" 
+                  class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-xl font-medium hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105">
+            <i class="fas fa-comment mr-2"></i>Contacter
+          </button>
+        </div>
+      `;
+      
+      profilesGrid.appendChild(profileCard);
+    }
+    
+    // Fonctions utilitaires pour les types de relations
+    function getRelationshipIcon(type) {
+      switch(type) {
+        case 'friendship': return '👥';
+        case 'romance': return '💕';
+        case 'both': return '💫';
+        default: return '💫';
+      }
+    }
+    
+    function getRelationshipText(type) {
+      switch(type) {
+        case 'friendship': return 'Amitié';
+        case 'romance': return 'Romance';
+        case 'both': return 'Les deux';
+        default: return 'Les deux';
+      }
+    }
+    
+    // Fonction pour filtrer les profils
+    function filterProfiles(type) {
+      const profileCards = document.querySelectorAll('.profile-card');
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      
+      // Mettre à jour les boutons de filtre
+      filterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-purple-600', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-700');
+      });
+      
+      event.target.classList.remove('bg-gray-200', 'text-gray-700');
+      event.target.classList.add('active', 'bg-purple-600', 'text-white');
+      
+      // Filtrer les profils
+      profileCards.forEach(card => {
+        const cardType = card.getAttribute('data-relationship-type');
+        if (type === 'all' || cardType === type || cardType === 'both') {
+          card.style.display = 'block';
+          card.style.animation = 'slideIn 0.3s ease-out';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+    
+    // Fonction pour voir un profil détaillé
+    function viewProfile(profileId) {
+      const profile = profiles.find(p => (p.id && p.id.toString() === profileId) || p.name === profileId);
+      if (!profile) return;
+      
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = `
+        <div class="text-center mb-6">
+          <div class="w-24 h-24 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full flex items-center justify-center text-white font-bold text-3xl mx-auto mb-4">
+            ${profile.name.charAt(0).toUpperCase()}
+          </div>
+          <h3 class="text-2xl font-bold text-gray-800">${profile.name}, ${profile.age} ans</h3>
+          <p class="text-gray-600"><i class="fas fa-map-marker-alt mr-2"></i>${profile.location}</p>
+        </div>
+        
+        <div class="space-y-6">
+          <div>
+            <h4 class="font-semibold text-gray-800 mb-2 flex items-center">
+              <i class="fas fa-user-circle mr-2 text-purple-600"></i>À propos
+            </h4>
+            <p class="text-gray-600 leading-relaxed">${profile.description}</p>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold text-gray-800 mb-2 flex items-center">
+              <i class="fas fa-heart mr-2 text-purple-600"></i>Centres d'intérêt
+            </h4>
+            <div class="flex flex-wrap gap-2">
+              ${profile.interests.split(',').map(interest => 
+                `<span class="bg-purple-100 text-purple-700 px-3 py-2 rounded-full text-sm">${interest.trim()}</span>`
+              ).join('')}
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold text-gray-800 mb-2 flex items-center">
+              <i class="fas fa-search mr-2 text-purple-600"></i>Recherche
+            </h4>
+            <div class="bg-gray-50 p-4 rounded-xl">
+              <span class="text-2xl mr-2">${getRelationshipIcon(profile.relationshipType)}</span>
+              <span class="text-gray-700">${getRelationshipText(profile.relationshipType)}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-8 flex space-x-4">
+          <button onclick="contactProfile('${profile.name}')" 
+                  class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all">
+            <i class="fas fa-comment mr-2"></i>Envoyer un message
+          </button>
+          <button onclick="closeProfileModal()" 
+                  class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-gray-400 transition-colors">
+            Fermer
+          </button>
+        </div>
+      `;
+      
+      document.getElementById('profile-modal').classList.remove('hidden');
+      document.getElementById('profile-modal').classList.add('flex');
+    }
+    
+    // Fonction pour fermer la modal de profil
+    function closeProfileModal() {
+      document.getElementById('profile-modal').classList.add('hidden');
+      document.getElementById('profile-modal').classList.remove('flex');
+    }
+    
+    // Fonction pour contacter un profil
+    function contactProfile(name) {
+      document.getElementById('recipient').value = name;
+      scrollToSection('chat');
+      closeProfileModal();
+      showNotification(`Prêt à envoyer un message à ${name} !`, 'info');
+    }
+    
+    // Fonction pour mettre à jour la liste des destinataires
+    function updateRecipientList() {
+      const recipientSelect = document.getElementById('recipient');
+      recipientSelect.innerHTML = '<option value="">Sélectionnez un destinataire</option>';
+      
+      profiles.forEach(profile => {
+        const option = document.createElement('option');
+        option.value = profile.name;
+        option.textContent = `${profile.name} (${profile.age} ans)`;
+        recipientSelect.appendChild(option);
+      });
+    }
+    
+    // Fonction pour envoyer un message
     function sendMessage() {
       const recipient = document.getElementById('recipient').value;
-      const message = document.getElementById('message').value;
+      const messageText = document.getElementById('message').value.trim();
 
-      if (recipient && message) {
-        alert(`Message envoyé à ${recipient} : "${message}"`);
-        document.getElementById('recipient').value = '';
-        document.getElementById('message').value = '';
-      } else {
-        alert('Veuillez indiquer le destinataire et le message.');
+      if (!recipient) {
+        showNotification('Veuillez sélectionner un destinataire.', 'error');
+        return;
       }
+      
+      if (!messageText) {
+        showNotification('Veuillez écrire un message.', 'error');
+        return;
+      }
+
+      const message = {
+        id: Date.now(),
+        recipient,
+        text: messageText,
+        timestamp: new Date().toLocaleString('fr-FR')
+      };
+
+      messages.push(message);
+      addMessageToConversations(message);
+
+      // Réinitialiser le formulaire
+      document.getElementById('recipient').value = '';
+      document.getElementById('message').value = '';
+      
+      showNotification(`Message envoyé à ${recipient} avec succès !`, 'success');
     }
+    
+    // Fonction pour ajouter un message aux conversations
+    function addMessageToConversations(message) {
+      const conversationsList = document.getElementById('conversations-list');
+      const conversationItem = document.createElement('div');
+      conversationItem.className = 'p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer chat-bubble';
+      conversationItem.innerHTML = `
+        <div class="flex justify-between items-start mb-2">
+          <h4 class="font-medium text-gray-800">${message.recipient}</h4>
+          <span class="text-xs text-gray-500">${message.timestamp}</span>
+        </div>
+        <p class="text-sm text-gray-600 truncate">${message.text}</p>
+      `;
+      
+      conversationsList.insertBefore(conversationItem, conversationsList.firstChild);
+    }
+    
+    // Système de notifications
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg max-w-sm transform translate-x-full transition-transform duration-300`;
+      
+      const colors = {
+        success: 'bg-green-500 text-white',
+        error: 'bg-red-500 text-white',
+        info: 'bg-blue-500 text-white',
+        warning: 'bg-yellow-500 text-white'
+      };
+      
+      const icons = {
+        success: 'fas fa-check-circle',
+        error: 'fas fa-exclamation-circle',
+        info: 'fas fa-info-circle',
+        warning: 'fas fa-exclamation-triangle'
+      };
+      
+      notification.className += ` ${colors[type]}`;
+      notification.innerHTML = `
+        <div class="flex items-center">
+          <i class="${icons[type]} mr-3"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animation d'entrée
+      setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+      }, 100);
+      
+      // Animation de sortie
+      setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 4000);
+    }
+    
+    // Gestion du scroll pour la navigation
+    window.addEventListener('scroll', function() {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 100) {
+        nav.classList.add('shadow-xl');
+      } else {
+        nav.classList.remove('shadow-xl');
+      }
+    });
+    
+    // Initialisation des styles de filtres
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstFilterBtn = document.querySelector('.filter-btn');
+      if (firstFilterBtn) {
+        firstFilterBtn.classList.add('bg-purple-600', 'text-white');
+        firstFilterBtn.classList.remove('bg-gray-200', 'text-gray-700');
+      }
+      
+      // Ajouter les classes par défaut aux autres boutons
+      document.querySelectorAll('.filter-btn:not(.active)').forEach(btn => {
+        btn.classList.add('bg-gray-200', 'text-gray-700');
+      });
+    });
+    
+    // Fermeture de la modal en cliquant en dehors
+    document.getElementById('profile-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeProfileModal();
+      }
+    });
+    
+    // Validation en temps réel des formulaires
+    document.getElementById('age').addEventListener('input', function() {
+      const age = parseInt(this.value);
+      if (age && (age < 18 || age > 100)) {
+        this.style.borderColor = '#ef4444';
+      } else {
+        this.style.borderColor = '#d1d5db';
+      }
+    });
+    
+    // Animation des éléments au scroll (intersection observer)
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+    
+    // Observer les éléments avec animation
+    document.addEventListener('DOMContentLoaded', function() {
+      const animatedElements = document.querySelectorAll('.card-hover');
+      animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+      });
+    });
   </script>
 </body>
 </html>
